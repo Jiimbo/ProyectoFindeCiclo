@@ -6,15 +6,18 @@
 package main;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
  *
  * @author victor
  */
-public class Fondo extends JFrame {
+public class Fondo extends JFrame implements ActionListener{
 
     private JLabel lblBola,lblPrueba1,lblPrueba2;
+    private Timer temporizador;
+    private int tiempo=500,cont=100;
     
     public Fondo() {
         super("BeatBall");
@@ -25,6 +28,21 @@ public class Fondo extends JFrame {
         lblBola.setLocation(50, 250);
         lblBola.setVisible(true);
         this.add(lblBola);
+        
+        temporizador=new Timer(tiempo, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                lblBola.setLocation(cont, 250);
+                cont=cont+50;
+                if (cont>=500) {
+                    temporizador.stop();
+                }
+            }
+        });
+                temporizador.start();
+    } 
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
     }
-    
 }
