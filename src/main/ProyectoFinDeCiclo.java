@@ -18,7 +18,7 @@ public class ProyectoFinDeCiclo {
      */
     public static void main(String[] args) {
         Fondo ventana = new Fondo();
-        ventana.setSize(500, 500);
+        ventana.setSize(800, 800);
         ventana.setLocationRelativeTo(null);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setVisible(true);

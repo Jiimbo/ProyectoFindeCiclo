@@ -23,16 +23,12 @@ public class Fondo extends JFrame implements ActionListener{
         super("BeatBall");
         this.setLayout(null);
         
-        lblBola=new JLabel("O.O");
-        lblBola.setSize(30,10);
-        lblBola.setLocation(50, 250);
-        lblBola.setVisible(true);
-        this.add(lblBola);
+        
         
         temporizador=new Timer(tiempo, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                lblBola.setLocation(cont, 250);
+                lblBola.setLocation(cont, 400);
                 cont=cont+50;
                 if (cont>=500) {
                     temporizador.stop();
