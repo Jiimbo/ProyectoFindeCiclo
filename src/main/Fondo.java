@@ -29,25 +29,21 @@ public class Fondo extends JFrame implements ActionListener {
         this.setBackground(Color.cyan);
 
         ImageIcon imagen = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\columna.png");
-        alBarreras=new ArrayList();
-        
+        alBarreras = new ArrayList();
+
         //-----------------------------
-        
-        lblBarrera = new JLabel(imagen);
-        lblBarrera.setSize(50, 200);
-        lblBarrera.setLocation(barreraX, 100);
-        this.add(lblBarrera);
-        
-        //----------------------------
-        
-        lblBarrera2 = new JLabel(imagen);
-        lblBarrera2.setSize(50, 300);
-        lblBarrera2.setLocation(barreraX, 400);
-        this.add(lblBarrera2);
-        
-        
+//        lblBarrera = new JLabel(imagen);
+//        lblBarrera.setSize(50, 200);
+//        lblBarrera.setLocation(barreraX, 100);
+//        this.add(lblBarrera);
+//
+//        //----------------------------
+//        lblBarrera2 = new JLabel(imagen);
+//        lblBarrera2.setSize(50, 300);
+//        lblBarrera2.setLocation(barreraX, 400);
+//        this.add(lblBarrera2);
+
         //asdfddfassdf
-        
         lblBola = new JLabel("O.O");
         lblBola.setSize(30, 10);
         lblBola.setLocation(50, bolaY);
@@ -57,10 +53,18 @@ public class Fondo extends JFrame implements ActionListener {
         tmrMovimiento = new Timer(tiempo, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                lblBarrera = new JLabel(imagen);
+                lblBarrera.setSize(50, (int)(Math.random()*400+1));
+                lblBarrera.setLocation(barreraX, 100);
+               Fondo. this.add(lblBarrera);
+                lblBarrera2 = new JLabel(imagen);
+                lblBarrera2.setSize(50,  (int)(Math.random()*500+1));
+                lblBarrera2.setLocation(barreraX, 400);
+                Fondo.this.add(lblBarrera2);
                 barreraX = barreraX - 5;
-                 lblBarrera.setLocation(barreraX, 100);
-                 lblBarrera2.setLocation(barreraX, 400);
-                 
+                lblBarrera.setLocation(barreraX, 100);
+                lblBarrera2.setLocation(barreraX, 400);
+
                 if (flag) {
                     bolaY = bolaY - 5;
                     lblBola.setLocation(50, bolaY);
