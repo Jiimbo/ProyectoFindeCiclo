@@ -13,32 +13,73 @@ import javax.swing.*;
  *
  * @author victor
  */
-public class Fondo extends JFrame implements ActionListener{
+public class Fondo extends JFrame implements ActionListener {
 
-    private JLabel lblBola,lblPrueba1,lblPrueba2;
-    private Timer temporizador;
-    private int tiempo=500,cont=100;
-    
+    private boolean flag = false;
+    private JLabel lblBola;
+    private Timer tmrMovimiento;
+    private int tiempo = 30, bolaY = 400;
+
     public Fondo() {
         super("BeatBall");
         this.setLayout(null);
-        
-        
-        
-        temporizador=new Timer(tiempo, new ActionListener() {
+        this.setBackground(Color.cyan);
+        lblBola = new JLabel("O.O");
+        lblBola.setSize(30, 10);
+        lblBola.setLocation(50, bolaY);
+        lblBola.setVisible(true);
+        this.add(lblBola);
+        tmrMovimiento = new Timer(tiempo, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                lblBola.setLocation(cont, 400);
-                cont=cont+50;
-                if (cont>=500) {
-                    temporizador.stop();
+                if (flag) {
+                    bolaY = bolaY - 5;
+                    lblBola.setLocation(50, bolaY);
+                    lblBola.setText("O.O");
+                    System.err.println(bolaY);
+                }
+                if (!flag) {
+                    bolaY = bolaY + 5;
+                    lblBola.setLocation(50, bolaY);
+                    lblBola.setText("O.O");
+                    System.err.println(bolaY);
                 }
             }
         });
-                temporizador.start();
-    } 
+        tmrMovimiento.start();
+
+        this.getContentPane().addKeyListener(new KeyHelper());
+        this.getContentPane().addMouseListener(new MouseHelper());
+    }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
+    }
+
+    public class MouseHelper extends MouseAdapter {
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            flag=true;
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            flag=false;
+        }
+    }
+
+    public class KeyHelper extends KeyAdapter {
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
+
     }
 }
