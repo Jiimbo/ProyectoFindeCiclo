@@ -17,17 +17,25 @@ import javax.swing.*;
 public class Fondo extends JFrame implements ActionListener {
 
     private boolean flag;
-    private JLabel lblBola, lblBarrera, lblBarrera2;
+    private JLabel lblBola, lblBarrera, lblBarrera2,lblSuelo,lblCielo;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
-    private int  bolaY = 400, cont = 0, randSizeY, randLocY;
+    private int bolaY = 400, cont = 0, randSizeY, randLocY;
 
     public Fondo() {
         super("BeatBall");
         this.setLayout(null);
 
+       
+        ImageIcon imgCielo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\cielo.png");
+        ImageIcon imgSuelo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\suelo.png");
         ImageIcon imgBarrera = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\columna.png");
+        ImageIcon imgFondo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\fondo.gif");
         ImageIcon imgAvion = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avion.png");
+        ImageIcon imgSube = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionsube.png");
+        ImageIcon imgBaja = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionbaja.png");
+        
+        ;
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
 
@@ -37,12 +45,26 @@ public class Fondo extends JFrame implements ActionListener {
         lblBola.setLocation(50, bolaY);
         lblBola.setVisible(true);
         this.add(lblBola);
-
+        
+        //SUELO
+        lblSuelo=new JLabel(imgSuelo);
+        lblSuelo.setSize(900, 400);
+        lblSuelo.setLocation(0, 650);
+        lblSuelo.setVisible(true);
+        this.add(lblSuelo);
+        //CIELO
+        lblCielo=new JLabel(imgCielo);
+        lblCielo.setSize(900, 100);
+        lblCielo.setLocation(0, 0);
+        lblCielo.setVisible(true);
+        this.add(lblCielo);
+        
+        
         tmrMovimiento = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                if (cont == 0 || (cont % 100 == 0)) {
+                if (cont == 0 || (cont % 80 == 0)) {
 
                     randSizeY = (int) (Math.random() * 480 + 1);
                     randLocY = randSizeY + 200;
@@ -76,14 +98,18 @@ public class Fondo extends JFrame implements ActionListener {
                 }
 
                 if (flag) {
+                    lblBola.setIcon(imgSube);
                     lblBola.setLocation(50, lblBola.getY() - 5);
                     if (lblBola.getY() == 100) {
+                        lblBola.setIcon(imgAvion);
                         lblBola.setLocation(50, lblBola.getY() + 5);
                     }
                 }
                 if (!flag) {
+                    lblBola.setIcon(imgBaja);
                     lblBola.setLocation(50, lblBola.getY() + 5);
                     if (lblBola.getY() == 600) {
+                        lblBola.setIcon(imgAvion);
                         lblBola.setLocation(50, lblBola.getY() - 5);
                     }
                 }
@@ -104,14 +130,10 @@ public class Fondo extends JFrame implements ActionListener {
         @Override
         public void mousePressed(MouseEvent e) {
             flag = true;
-            ImageIcon imgSube = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionsube.png");
-            lblBola.setIcon(imgSube);
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            ImageIcon imgBaja = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionbaja.png");
-            lblBola.setIcon(imgBaja);
             flag = false;
         }
     }
