@@ -18,10 +18,10 @@ public class Fondo extends JFrame implements ActionListener {
 
     private boolean flag;
     private JLabel lblBola, lblBarrera, lblBarrera2;
-    private ArrayList<JLabel> alBarreras;
+    private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private ImageIcon imagen;
-    private int tiempo = 15, bolaY = 400, barreraX = 700;
+    private int tiempo = 15, bolaY = 400, barreraX = 700, cont = 0, index = 0;
 
     public Fondo() {
         super("BeatBall");
@@ -30,19 +30,22 @@ public class Fondo extends JFrame implements ActionListener {
 
         ImageIcon imagen = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\columna.png");
         alBarreras = new ArrayList();
+        alBarreras2 = new ArrayList();
 
-        //-----------------------------
 //        lblBarrera = new JLabel(imagen);
-//        lblBarrera.setSize(50, 200);
+//        //MAXIMO 200 DE Y.SIZE
+//        lblBarrera.setSize(50, (int) (200));
 //        lblBarrera.setLocation(barreraX, 100);
-//        this.add(lblBarrera);
+//        alBarreras.add(lblBarrera);
 //
-//        //----------------------------
 //        lblBarrera2 = new JLabel(imagen);
-//        lblBarrera2.setSize(50, 300);
+//        //MAXIMO 200 DE Y.SIZE
+//        lblBarrera2.setSize(50, (int) (200));
 //        lblBarrera2.setLocation(barreraX, 400);
-//        this.add(lblBarrera2);
-
+//        alBarreras2.add(lblBarrera2);
+//
+//        Fondo.this.add(alBarreras.get(cont));
+//        Fondo.this.add(alBarreras2.get(cont));
         //asdfddfassdf
         lblBola = new JLabel("O.O");
         lblBola.setSize(30, 10);
@@ -53,17 +56,29 @@ public class Fondo extends JFrame implements ActionListener {
         tmrMovimiento = new Timer(tiempo, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                lblBarrera = new JLabel(imagen);
-                lblBarrera.setSize(50, (int)(Math.random()*400+1));
-                lblBarrera.setLocation(barreraX, 100);
-               Fondo. this.add(lblBarrera);
-                lblBarrera2 = new JLabel(imagen);
-                lblBarrera2.setSize(50,  (int)(Math.random()*500+1));
-                lblBarrera2.setLocation(barreraX, 400);
-                Fondo.this.add(lblBarrera2);
+
+                if (cont == 0 || cont % 100 == 1) {
+                    lblBarrera = new JLabel(imagen);
+                    //MAXIMO 200 DE Y.SIZE
+                    lblBarrera.setSize(50, (int) (200));
+                    lblBarrera.setLocation(barreraX, 100);
+                    alBarreras.add(lblBarrera);
+
+                    lblBarrera2 = new JLabel(imagen);
+                    //MAXIMO 200 DE Y.SIZE
+                    lblBarrera2.setSize(50, (int) (200));
+                    lblBarrera2.setLocation(barreraX, 400);
+                    alBarreras2.add(lblBarrera2);
+
+                    Fondo.this.add(alBarreras.get(index));
+                    Fondo.this.add(alBarreras2.get(index));
+                    index++;
+                }
+                cont++;
+                System.err.println(cont);
+                alBarreras.get(index-1).setLocation(barreraX, 100);
+                alBarreras2.get(index-1).setLocation(barreraX, 400);
                 barreraX = barreraX - 5;
-                lblBarrera.setLocation(barreraX, 100);
-                lblBarrera2.setLocation(barreraX, 400);
 
                 if (flag) {
                     bolaY = bolaY - 5;
