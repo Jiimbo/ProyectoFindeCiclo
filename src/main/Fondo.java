@@ -17,7 +17,7 @@ import javax.swing.*;
 public class Fondo extends JFrame implements ActionListener {
 
     private boolean flag;
-    private JLabel lblBola, lblBarrera, lblBarrera2,lblSuelo,lblCielo;
+    private JLabel lblAvion, lblBarrera, lblBarrera2,lblSuelo,lblCielo;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private int bolaY = 400, cont = 0, randSizeY, randLocY;
@@ -27,24 +27,25 @@ public class Fondo extends JFrame implements ActionListener {
         this.setLayout(null);
 
        
-        ImageIcon imgCielo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\cielo.png");
-        ImageIcon imgSuelo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\suelo.png");
-        ImageIcon imgBarrera = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\columna.png");
-        ImageIcon imgFondo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\fondo.gif");
-        ImageIcon imgAvion = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avion.png");
-        ImageIcon imgSube = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionsube.png");
-        ImageIcon imgBaja = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionbaja.png");
+        ImageIcon imgCielo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\cielo.png");
+        ImageIcon imgSuelo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\suelo.png");
+        ImageIcon imgBarrera = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\columna.png");
+        ImageIcon imgFondo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\fondo.gif");
+        ImageIcon imgAvion = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\avion.png");
+        ImageIcon imgSube = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\avionsube.png");
+        ImageIcon imgBaja = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\avionbaja.png");
+        ImageIcon imgExplosion = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\explosion.png");
         
         ;
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
 
         //PAJARO
-        lblBola = new JLabel(imgAvion);
-        lblBola.setSize(100, 90);
-        lblBola.setLocation(50, bolaY);
-        lblBola.setVisible(true);
-        this.add(lblBola);
+        lblAvion = new JLabel(imgAvion);
+        lblAvion.setSize(100, 90);
+        lblAvion.setLocation(50, bolaY);
+        lblAvion.setVisible(true);
+        this.add(lblAvion);
         
         //SUELO
         lblSuelo=new JLabel(imgSuelo);
@@ -70,14 +71,12 @@ public class Fondo extends JFrame implements ActionListener {
                     randLocY = randSizeY + 200;
 
                     lblBarrera = new JLabel(imgBarrera);
-                    //MAXIMO 200 DE Y.SIZE
                     lblBarrera.setSize(50, randSizeY);
                     lblBarrera.setLocation(900, 100);
                     alBarreras.add(lblBarrera);
 
                     lblBarrera2 = new JLabel(imgBarrera);
                     lblBarrera2.setSize(50, (800));
-                    //MAXIMO 600 DE LOCATION
                     lblBarrera2.setLocation(900, randLocY);
                     alBarreras2.add(lblBarrera2);
 
@@ -86,9 +85,7 @@ public class Fondo extends JFrame implements ActionListener {
                     Fondo.this.add(lblBarrera2);
 
                 }
-                System.err.println("CONTADOR = " + cont);
-                System.err.println("SIZE Y= " + randSizeY);
-                System.err.println("LOCAT Y= " + randLocY);
+                
                 cont++;
                 for (JLabel barrera : alBarreras) {
                     barrera.setLocation(barrera.getX() - 5, 100);
@@ -98,20 +95,26 @@ public class Fondo extends JFrame implements ActionListener {
                 }
 
                 if (flag) {
-                    lblBola.setIcon(imgSube);
-                    lblBola.setLocation(50, lblBola.getY() - 5);
-                    if (lblBola.getY() == 100) {
-                        lblBola.setIcon(imgAvion);
-                        lblBola.setLocation(50, lblBola.getY() + 5);
+                    lblAvion.setIcon(imgSube);
+                    lblAvion.setLocation(50, lblAvion.getY() - 5);
+                    if (lblAvion.getY() == 100) {
+                        lblAvion.setIcon(imgAvion);
+                        lblAvion.setLocation(50, lblAvion.getY() + 5);
                     }
                 }
                 if (!flag) {
-                    lblBola.setIcon(imgBaja);
-                    lblBola.setLocation(50, lblBola.getY() + 5);
-                    if (lblBola.getY() == 600) {
-                        lblBola.setIcon(imgAvion);
-                        lblBola.setLocation(50, lblBola.getY() - 5);
+                    lblAvion.setIcon(imgBaja);
+                    lblAvion.setLocation(50, lblAvion.getY() + 5);
+                    if (lblAvion.getY() == 600) {
+                        lblAvion.setIcon(imgAvion);
+                        lblAvion.setLocation(50, lblAvion.getY() - 5);
                     }
+                    System.err.println("AVION   "+lblAvion.getBounds());
+                    System.err.println("BARRERA   "+lblBarrera.getBounds());
+                    System.err.println("BARRERA22    "+lblBarrera2.getBounds());
+                }
+                if ((lblAvion.getX()==(lblBarrera2.getX()/100))||(lblAvion.getY()==lblBarrera2.getY())) {
+                   lblAvion.setIcon(imgExplosion);
                 }
             }
         });
