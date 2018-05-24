@@ -21,12 +21,11 @@ public class Fondo extends JFrame implements ActionListener {
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private ImageIcon imagen;
-    private int tiempo = 15, bolaY = 400, barreraX = 700, cont = 0, index = 0;
+    private int tiempo = 15, bolaY = 400, barreraMov = 700, index=0,cont = 0;
 
     public Fondo() {
         super("BeatBall");
         this.setLayout(null);
-        this.setBackground(Color.cyan);
 
         ImageIcon imagen = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\columna.png");
         alBarreras = new ArrayList();
@@ -57,28 +56,35 @@ public class Fondo extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                if (cont == 0 || cont % 100 == 1) {
+                if (cont == 0 || (cont % 50 == 0)) {
                     lblBarrera = new JLabel(imagen);
                     //MAXIMO 200 DE Y.SIZE
                     lblBarrera.setSize(50, (int) (200));
-                    lblBarrera.setLocation(barreraX, 100);
+                    lblBarrera.setLocation(700, 100);
                     alBarreras.add(lblBarrera);
 
                     lblBarrera2 = new JLabel(imagen);
                     //MAXIMO 200 DE Y.SIZE
                     lblBarrera2.setSize(50, (int) (200));
-                    lblBarrera2.setLocation(barreraX, 400);
-                    alBarreras2.add(lblBarrera2);
+                    lblBarrera2.setLocation(700, 400);
+                    alBarreras2.add( lblBarrera2);
 
-                    Fondo.this.add(alBarreras.get(index));
-                    Fondo.this.add(alBarreras2.get(index));
-                    index++;
+                    Fondo.this.add(lblBarrera);
+                    Fondo.this.add(lblBarrera2);
+
+//                    if (cont != 0&&cont%50==0) {
+//                        index++;
+//                    }
                 }
+                System.err.println("CONTADOR = " + cont);
+                System.err.println("INDEX = " + index);
                 cont++;
-                System.err.println(cont);
-                alBarreras.get(index-1).setLocation(barreraX, 100);
-                alBarreras2.get(index-1).setLocation(barreraX, 400);
-                barreraX = barreraX - 5;
+                for (JLabel barrera : alBarreras) {
+                    barrera.setLocation(barrera.getX()-5, 100);
+                }
+                for (JLabel barrera : alBarreras2) {
+                    barrera.setLocation(barrera.getX()-5, 400);
+                }
 
                 if (flag) {
                     bolaY = bolaY - 5;
