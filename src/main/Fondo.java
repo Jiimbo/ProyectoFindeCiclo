@@ -21,7 +21,7 @@ public class Fondo extends JFrame implements ActionListener {
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private ImageIcon imagen;
-    private int tiempo = 15, bolaY = 400, barreraMov = 700, index=0,cont = 0;
+    private int tiempo = 15, bolaY = 400, cont = 0, randSizeY,randLocY;
 
     public Fondo() {
         super("BeatBall");
@@ -31,21 +31,7 @@ public class Fondo extends JFrame implements ActionListener {
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
 
-//        lblBarrera = new JLabel(imagen);
-//        //MAXIMO 200 DE Y.SIZE
-//        lblBarrera.setSize(50, (int) (200));
-//        lblBarrera.setLocation(barreraX, 100);
-//        alBarreras.add(lblBarrera);
-//
-//        lblBarrera2 = new JLabel(imagen);
-//        //MAXIMO 200 DE Y.SIZE
-//        lblBarrera2.setSize(50, (int) (200));
-//        lblBarrera2.setLocation(barreraX, 400);
-//        alBarreras2.add(lblBarrera2);
-//
-//        Fondo.this.add(alBarreras.get(cont));
-//        Fondo.this.add(alBarreras2.get(cont));
-        //asdfddfassdf
+        //PAJARO
         lblBola = new JLabel("O.O");
         lblBola.setSize(30, 10);
         lblBola.setLocation(50, bolaY);
@@ -57,47 +43,46 @@ public class Fondo extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent ae) {
 
                 if (cont == 0 || (cont % 50 == 0)) {
+                    
+                    randSizeY=(int)(Math.random()*200+1);
+                    randLocY=(int)(Math.random()*200+400);
+                    
                     lblBarrera = new JLabel(imagen);
                     //MAXIMO 200 DE Y.SIZE
-                    lblBarrera.setSize(50, (int) (200));
-                    lblBarrera.setLocation(700, 100);
+                    lblBarrera.setSize(50, randSizeY);
+                    lblBarrera.setLocation(900, 100);
                     alBarreras.add(lblBarrera);
 
                     lblBarrera2 = new JLabel(imagen);
-                    //MAXIMO 200 DE Y.SIZE
-                    lblBarrera2.setSize(50, (int) (200));
-                    lblBarrera2.setLocation(700, 400);
-                    alBarreras2.add( lblBarrera2);
+                    lblBarrera2.setSize(50, (500));
+                    //MAXIMO 600 DE LOCATION
+                    lblBarrera2.setLocation(900, randLocY);
+                    alBarreras2.add(lblBarrera2);
 
+                    //NO HACE FALTA INDEX PORQUE HACE REFERENCIA A SU PROPIA POSICION DE MEMORIA
                     Fondo.this.add(lblBarrera);
                     Fondo.this.add(lblBarrera2);
 
-//                    if (cont != 0&&cont%50==0) {
-//                        index++;
-//                    }
                 }
                 System.err.println("CONTADOR = " + cont);
-                System.err.println("INDEX = " + index);
                 cont++;
                 for (JLabel barrera : alBarreras) {
-                    barrera.setLocation(barrera.getX()-5, 100);
+                    barrera.setLocation(barrera.getX() - 5, 100);
                 }
                 for (JLabel barrera : alBarreras2) {
-                    barrera.setLocation(barrera.getX()-5, 400);
+                    barrera.setLocation(barrera.getX() - 5, barrera.getY());
                 }
 
                 if (flag) {
-                    bolaY = bolaY - 5;
-                    lblBola.setLocation(50, bolaY);
-                    if (bolaY == 100) {
-                        bolaY = 105;
+                    lblBola.setLocation(50, lblBola.getY() - 5);
+                    if ( lblBola.getY() == 100) {
+                        lblBola.setLocation(50, lblBola.getY()+5);
                     }
                 }
                 if (!flag) {
-                    bolaY = bolaY + 5;
-                    lblBola.setLocation(50, bolaY);
-                    if (bolaY == 600) {
-                        bolaY = 595;
+                    lblBola.setLocation(50, lblBola.getY() + 5);
+                    if (lblBola.getY() == 600) {
+                        lblBola.setLocation(50, lblBola.getY()-5);
                     }
                 }
             }
