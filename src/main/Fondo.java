@@ -20,41 +20,41 @@ public class Fondo extends JFrame implements ActionListener {
     private JLabel lblBola, lblBarrera, lblBarrera2;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
-    private ImageIcon imagen;
-    private int tiempo = 15, bolaY = 400, cont = 0, randSizeY,randLocY;
+    private int  bolaY = 400, cont = 0, randSizeY, randLocY;
 
     public Fondo() {
         super("BeatBall");
         this.setLayout(null);
 
-        ImageIcon imagen = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\columna.png");
+        ImageIcon imgBarrera = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\columna.png");
+        ImageIcon imgAvion = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avion.png");
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
 
         //PAJARO
-        lblBola = new JLabel("O.O");
-        lblBola.setSize(30, 10);
+        lblBola = new JLabel(imgAvion);
+        lblBola.setSize(100, 90);
         lblBola.setLocation(50, bolaY);
         lblBola.setVisible(true);
         this.add(lblBola);
 
-        tmrMovimiento = new Timer(tiempo, new ActionListener() {
+        tmrMovimiento = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                if (cont == 0 || (cont % 50 == 0)) {
-                    
-                    randSizeY=(int)(Math.random()*200+1);
-                    randLocY=(int)(Math.random()*200+400);
-                    
-                    lblBarrera = new JLabel(imagen);
+                if (cont == 0 || (cont % 100 == 0)) {
+
+                    randSizeY = (int) (Math.random() * 480 + 1);
+                    randLocY = randSizeY + 200;
+
+                    lblBarrera = new JLabel(imgBarrera);
                     //MAXIMO 200 DE Y.SIZE
                     lblBarrera.setSize(50, randSizeY);
                     lblBarrera.setLocation(900, 100);
                     alBarreras.add(lblBarrera);
 
-                    lblBarrera2 = new JLabel(imagen);
-                    lblBarrera2.setSize(50, (500));
+                    lblBarrera2 = new JLabel(imgBarrera);
+                    lblBarrera2.setSize(50, (800));
                     //MAXIMO 600 DE LOCATION
                     lblBarrera2.setLocation(900, randLocY);
                     alBarreras2.add(lblBarrera2);
@@ -65,6 +65,8 @@ public class Fondo extends JFrame implements ActionListener {
 
                 }
                 System.err.println("CONTADOR = " + cont);
+                System.err.println("SIZE Y= " + randSizeY);
+                System.err.println("LOCAT Y= " + randLocY);
                 cont++;
                 for (JLabel barrera : alBarreras) {
                     barrera.setLocation(barrera.getX() - 5, 100);
@@ -75,14 +77,14 @@ public class Fondo extends JFrame implements ActionListener {
 
                 if (flag) {
                     lblBola.setLocation(50, lblBola.getY() - 5);
-                    if ( lblBola.getY() == 100) {
-                        lblBola.setLocation(50, lblBola.getY()+5);
+                    if (lblBola.getY() == 100) {
+                        lblBola.setLocation(50, lblBola.getY() + 5);
                     }
                 }
                 if (!flag) {
                     lblBola.setLocation(50, lblBola.getY() + 5);
                     if (lblBola.getY() == 600) {
-                        lblBola.setLocation(50, lblBola.getY()-5);
+                        lblBola.setLocation(50, lblBola.getY() - 5);
                     }
                 }
             }
@@ -102,10 +104,14 @@ public class Fondo extends JFrame implements ActionListener {
         @Override
         public void mousePressed(MouseEvent e) {
             flag = true;
+            ImageIcon imgSube = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionsube.png");
+            lblBola.setIcon(imgSube);
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
+            ImageIcon imgBaja = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\imagenes\\avionbaja.png");
+            lblBola.setIcon(imgBaja);
             flag = false;
         }
     }
