@@ -16,15 +16,17 @@ import javax.swing.*;
  */
 public class Juego extends JDialog implements ActionListener {
 
-    private boolean flagMovimiento, flagColision=true;
-    private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblFondo,lblContador,lblFinal;
+    private boolean flagMovimiento, flagColision = true;
+    private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblFondo, lblContador, lblFinal, lblContinue;
+    private JButton btnSi, btnNo;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
-    private int bolaY = 400, cont = 0, randSizeY, randLocY,record=0;
+    private int bolaY = 400, cont = 0, randSizeY, randLocY, record = 0;
 
     public Juego(Inicio ventanaInicio) {
         super(ventanaInicio, true);
         this.setLayout(null);
+        this.setFocusable(true);
 
         ImageIcon imgCielo = new ImageIcon(Juego.class.getResource("/main/imagenes/cielo.png"));
         ImageIcon imgSuelo = new ImageIcon(Juego.class.getResource("/main/imagenes/suelo.png"));
@@ -35,7 +37,6 @@ public class Juego extends JDialog implements ActionListener {
         ImageIcon imgBaja = new ImageIcon(Juego.class.getResource("/main/imagenes/avionbaja.png"));
         ImageIcon imgExplosion = new ImageIcon(Juego.class.getResource("/main/imagenes/explosion.png"));
         ImageIcon imgFinal = new ImageIcon(Juego.class.getResource("/main/imagenes/gameover.png"));
-        
 
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
@@ -45,33 +46,56 @@ public class Juego extends JDialog implements ActionListener {
         lblAvion.setLocation(50, bolaY);
         lblAvion.setVisible(true);
         this.add(lblAvion);
-        
+
         //CONTADOR PUNTUACIÓN
-        lblContador = new JLabel("Puntuación : "+Integer.toString(record));
-        lblContador.setSize(600,50);
+        lblContador = new JLabel("Puntuación : " + Integer.toString(record));
+        lblContador.setSize(600, 50);
         lblContador.setLocation(350, 50);
         lblContador.setVisible(true);
         this.add(lblContador);
-        
-        //TEXTO FINAL
+
+        //GAME OVER
         lblFinal = new JLabel(imgFinal);
-        lblFinal.setSize(500,300);
-        lblFinal.setLocation(150,200);
+        lblFinal.setSize(500, 300);
+        lblFinal.setLocation(150, 200);
         lblFinal.setVisible(false);
         this.add(lblFinal);
 
+        //CONTINUE?
+        lblContinue = new JLabel("Continuar?");
+        lblContinue.setSize(200, 50);
+        lblContinue.setLocation(350, 450);
+        lblContinue.setVisible(false);
+        this.add(lblContinue);
+
+        //BOTON SI
+        btnSi = new JButton("Si");
+        btnSi.setSize(100, 50);
+        btnSi.setLocation(280, 500);
+        btnSi.setVisible(false);
+        this.add(btnSi);
+
+        //BOTON NO
+        btnNo = new JButton("No");
+        btnNo.setSize(100, 50);
+        btnNo.setLocation(390, 500);
+        btnNo.setVisible(false);
+        this.add(btnNo);
+
         //SUELO
-        lblSuelo = new JLabel(imgCielo);
+        lblSuelo = new JLabel(imgSuelo);
         lblSuelo.setSize(900, 400);
-        lblSuelo.setLocation(0, 650);
+        lblSuelo.setLocation(0, 670);
         lblSuelo.setVisible(true);
         this.add(lblSuelo);
         //CIELO
-        lblCielo = new JLabel(imgSuelo);
-        lblCielo.setSize(900, 110);
+        lblCielo = new JLabel(imgCielo);
+        lblCielo.setSize(900, 100);
         lblCielo.setLocation(0, 0);
         lblCielo.setVisible(true);
         this.add(lblCielo);
+
+        this.getContentPane().addKeyListener(new KeyHelper());
         //FONDO
 //        lblFondo = new JLabel(imgFondo);
 //        lblFondo.setSize(600, 500);
@@ -83,18 +107,15 @@ public class Juego extends JDialog implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                if (cont == 0 || (cont % 80 == 0)) {
-
+                if (cont == 0 || (cont % 90 == 0)) {
                     creaBarrera();
-
                 }
-
                 cont++;
                 for (JLabel barrera : alBarreras) {
                     barrera.setLocation(barrera.getX() - 5, 100);
-                    if (barrera.getX()<50) {
+                    if (barrera.getX() < 50) {
                         record++;
-                        lblContador.setText("Puntuación : "+Integer.toString(record));
+                        lblContador.setText("Puntuación : " + Integer.toString(record));
                     }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
                         flagColision = false;
@@ -103,9 +124,9 @@ public class Juego extends JDialog implements ActionListener {
                 }
                 for (JLabel barrera : alBarreras2) {
                     barrera.setLocation(barrera.getX() - 5, barrera.getY());
-                    if (barrera.getX()<50) {
+                    if (barrera.getX() < 50) {
                         record++;
-                        lblContador.setText("Puntuación : "+Integer.toString(record));
+                        lblContador.setText("Puntuación : " + Integer.toString(record));
                     }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
                         flagColision = false;
@@ -123,7 +144,7 @@ public class Juego extends JDialog implements ActionListener {
                 if (!flagMovimiento) {
                     lblAvion.setIcon(imgBaja);
                     lblAvion.setLocation(50, lblAvion.getY() + 5);
-                    if (lblAvion.getY() == 630) {
+                    if (lblAvion.getY() == 650) {
                         lblAvion.setIcon(imgAvion);
                         lblAvion.setLocation(50, lblAvion.getY() - 5);
                     }
@@ -134,6 +155,9 @@ public class Juego extends JDialog implements ActionListener {
                 if (!flagColision) {
                     lblAvion.setIcon(imgExplosion);
                     lblFinal.setVisible(true);
+                    btnSi.setVisible(true);
+                    btnNo.setVisible(true);
+                    lblContinue.setVisible(true);
                     tmrMovimiento.stop();
                 }
 
@@ -188,10 +212,16 @@ public class Juego extends JDialog implements ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                flagMovimiento = true;
+            }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
+             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                flagMovimiento = false;
+            }
         }
 
     }
