@@ -16,7 +16,7 @@ import javax.swing.*;
  */
 public class Juego extends JDialog implements ActionListener {
 
-    private boolean flag;
+    private boolean flagMovimiento, flagColision=true;
     private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblFondo;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
@@ -25,17 +25,15 @@ public class Juego extends JDialog implements ActionListener {
     public Juego(Inicio ventanaInicio) {
         super(ventanaInicio, true);
         this.setLayout(null);
-        
-       
 
-        ImageIcon imgCielo = new ImageIcon( Juego.class.getResource("/main/imagenes/cielo.png"));
-        ImageIcon imgSuelo = new ImageIcon( Juego.class.getResource("/main/imagenes/suelo.png"));
-        ImageIcon imgBarrera = new ImageIcon( Juego.class.getResource("/main/imagenes/columna.png"));
+        ImageIcon imgCielo = new ImageIcon(Juego.class.getResource("/main/imagenes/cielo.png"));
+        ImageIcon imgSuelo = new ImageIcon(Juego.class.getResource("/main/imagenes/suelo.png"));
+        ImageIcon imgBarrera = new ImageIcon(Juego.class.getResource("/main/imagenes/columna.png"));
 //        ImageIcon imgFondo = new ImageIcon( Juego.class.getResource("/main/imagenes/cielo.png"));
-        ImageIcon imgAvion = new ImageIcon( Juego.class.getResource("/main/imagenes/avion.png"));
-        ImageIcon imgSube = new ImageIcon( Juego.class.getResource("/main/imagenes/avionsube.png"));
-        ImageIcon imgBaja = new ImageIcon( Juego.class.getResource("/main/imagenes/avionbaja.png"));
-        ImageIcon imgExplosion = new ImageIcon( Juego.class.getResource("/main/imagenes/explosion.png"));
+        ImageIcon imgAvion = new ImageIcon(Juego.class.getResource("/main/imagenes/avion.png"));
+        ImageIcon imgSube = new ImageIcon(Juego.class.getResource("/main/imagenes/avionsube.png"));
+        ImageIcon imgBaja = new ImageIcon(Juego.class.getResource("/main/imagenes/avionbaja.png"));
+        ImageIcon imgExplosion = new ImageIcon(Juego.class.getResource("/main/imagenes/explosion.png"));
 
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
@@ -69,7 +67,7 @@ public class Juego extends JDialog implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                if (cont == 0 || (cont % 250 == 0)) {
+                if (cont == 0 || (cont % 80 == 0)) {
 
                     creaBarrera();
 
@@ -78,12 +76,19 @@ public class Juego extends JDialog implements ActionListener {
                 cont++;
                 for (JLabel barrera : alBarreras) {
                     barrera.setLocation(barrera.getX() - 5, 100);
+                    if (lblAvion.getBounds().intersects(barrera.getBounds())) {
+                        flagColision = false;
+                    }
+
                 }
                 for (JLabel barrera : alBarreras2) {
                     barrera.setLocation(barrera.getX() - 5, barrera.getY());
+                    if (lblAvion.getBounds().intersects(barrera.getBounds())) {
+                        flagColision = false;
+                    }
                 }
 
-                if (flag) {
+                if (flagMovimiento) {
                     lblAvion.setIcon(imgSube);
                     lblAvion.setLocation(50, lblAvion.getY() - 5);
                     if (lblAvion.getY() == 100) {
@@ -91,21 +96,22 @@ public class Juego extends JDialog implements ActionListener {
                         lblAvion.setLocation(50, lblAvion.getY() + 5);
                     }
                 }
-                if (!flag) {
+                if (!flagMovimiento) {
                     lblAvion.setIcon(imgBaja);
                     lblAvion.setLocation(50, lblAvion.getY() + 5);
                     if (lblAvion.getY() == 630) {
                         lblAvion.setIcon(imgAvion);
                         lblAvion.setLocation(50, lblAvion.getY() - 5);
                     }
-                    System.err.println("AVION   " + lblAvion.getBounds());
-                    System.err.println("BARRERA   " + lblBarrera.getBounds());
-                    System.err.println("BARRERA22    " + lblBarrera2.getBounds());
+//                    System.err.println("AVION   " + lblAvion.getBounds());
+//                    System.err.println("BARRERA   " + lblBarrera.getBounds());
+//                    System.err.println("BARRERA22    " + lblBarrera2.getBounds());
                 }
-                if ((lblAvion.getBounds().intersects(lblBarrera.getBounds())) || (lblAvion.getBounds().intersects(lblBarrera2.getBounds()))) {
-                    System.err.println("CHOCASTE WEÓN");
+                if (!flagColision) {
                     lblAvion.setIcon(imgExplosion);
+                    tmrMovimiento.stop();
                 }
+
             }
 
             public void creaBarrera() {
@@ -127,7 +133,7 @@ public class Juego extends JDialog implements ActionListener {
 //NO HACE FALTA INDEX PORQUE HACE REFERENCIA A SU PROPIA POSICION DE MEMORIA
                 Juego.this.add(lblBarrera);
                 Juego.this.add(lblBarrera2);
-               ;
+                ;
             }
         });
         tmrMovimiento.start();
@@ -144,12 +150,12 @@ public class Juego extends JDialog implements ActionListener {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            flag = true;
+            flagMovimiento = true;
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            flag = false;
+            flagMovimiento = false;
         }
     }
 
