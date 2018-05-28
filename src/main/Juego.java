@@ -24,7 +24,7 @@ public class Juego extends JDialog implements ActionListener {
     private int bolaY = 400, cont = 0, randSizeY, randLocY, record = 0;
 
     public Juego(Inicio ventanaInicio) {
-        super(ventanaInicio, true);
+        super(ventanaInicio,"Airplane Dodge", true);
         this.setLayout(null);
         this.setFocusable(true);
 
@@ -210,7 +210,7 @@ public class Juego extends JDialog implements ActionListener {
             alBarreras.clear();
             alBarreras2.clear();
             hazVisible(false);
-            record=0;
+            record = 0;
             lblContador.setText("Puntuación : " + Integer.toString(record));
             lblContador.setLocation(350, 50);
             flagColision = true;

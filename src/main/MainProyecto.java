@@ -19,7 +19,8 @@ public class MainProyecto {
     public static void main(String[] args) {
        
         Inicio ventana = new Inicio();
-        ventana.setSize(400, 400);
+        ventana.setSize(200, 300);
+        ventana.setResizable(false);
         ventana.setLocationRelativeTo(null);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setVisible(true);

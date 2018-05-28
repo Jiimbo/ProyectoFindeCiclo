@@ -14,17 +14,39 @@ import javax.swing.*;
  */
 public class Inicio extends JFrame implements ActionListener {
 
-    private JButton btnJugar;
+    private JButton btnJugar,btnRecord,btnSalir,btnControl;
 
     public Inicio() {
-        super("Menú de Juego ---- Airplane Dodge");
+        super();
         this.setLayout(null);
 
+        //JUGAR
         btnJugar = new JButton("Jugar");
-        btnJugar.setSize(70, 30);
-        btnJugar.setLocation(160, 50);
+        btnJugar.setSize(100, 30);
+        btnJugar.setLocation(45, 30);
         btnJugar.addActionListener(this);
         this.add(btnJugar);
+        
+        //RECORD
+        btnRecord = new JButton("Récord");
+        btnRecord.setSize(100, 30);
+        btnRecord.setLocation(45, 70);
+        btnRecord.addActionListener(this);
+        this.add(btnRecord);
+        
+        //CONTROLES
+        btnControl = new JButton("Controles");
+        btnControl.setSize(100, 30);
+        btnControl.setLocation(45, 110);
+        btnControl.addActionListener(this);
+        this.add(btnControl);
+        
+        //SALIR
+        btnSalir = new JButton("Salir");
+        btnSalir.setSize(100, 30);
+        btnSalir.setLocation(45, 150);
+        btnSalir.addActionListener(this);
+        this.add(btnSalir);
     }
 
     @Override
@@ -32,9 +54,31 @@ public class Inicio extends JFrame implements ActionListener {
         if (e.getSource() == btnJugar) {
             Juego juego = new Juego(this);
             juego.setSize(800, 800);
+            juego.setResizable(false);
             juego.setLocationRelativeTo(null);
             juego.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             juego.setVisible(true);
+        }
+        if (e.getSource()==btnRecord) {
+            Auxiliar aux = new Auxiliar(this);
+            aux.setSize(220, 120);
+            aux.setResizable(false);
+            aux.setLocationRelativeTo(null);
+            aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            aux.setVisible(true);
+            
+        }
+        if (e.getSource()==btnControl) {
+            Auxiliar aux = new Auxiliar(this);
+            aux.setSize(220, 120);
+            aux.setResizable(false);
+            aux.setLocationRelativeTo(null);
+            aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            aux.setVisible(true);
+            
+        }
+        if (e.getSource()==btnSalir) {
+            System.exit(0);
         }
     }
 
