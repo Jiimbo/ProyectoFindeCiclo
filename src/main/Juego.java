@@ -62,9 +62,9 @@ public class Juego extends JDialog implements ActionListener {
         this.add(lblFinal);
 
         //CONTINUE?
-        lblContinue = new JLabel("Continuar?");
+        lblContinue = new JLabel("¿Volver a jugar?");
         lblContinue.setSize(200, 50);
-        lblContinue.setLocation(350, 450);
+        lblContinue.setLocation(330, 450);
         lblContinue.setVisible(false);
         this.add(lblContinue);
 
@@ -73,6 +73,7 @@ public class Juego extends JDialog implements ActionListener {
         btnSi.setSize(100, 50);
         btnSi.setLocation(280, 500);
         btnSi.setVisible(false);
+        btnSi.addActionListener(this);
         this.add(btnSi);
 
         //BOTON NO
@@ -80,6 +81,7 @@ public class Juego extends JDialog implements ActionListener {
         btnNo.setSize(100, 50);
         btnNo.setLocation(390, 500);
         btnNo.setVisible(false);
+        btnNo.addActionListener(this);
         this.add(btnNo);
 
         //SUELO
@@ -144,7 +146,7 @@ public class Juego extends JDialog implements ActionListener {
                 if (!flagMovimiento) {
                     lblAvion.setIcon(imgBaja);
                     lblAvion.setLocation(50, lblAvion.getY() + 5);
-                    if (lblAvion.getY() == 650) {
+                    if (lblAvion.getY() == 640) {
                         lblAvion.setIcon(imgAvion);
                         lblAvion.setLocation(50, lblAvion.getY() - 5);
                     }
@@ -153,11 +155,9 @@ public class Juego extends JDialog implements ActionListener {
 //                    System.err.println("BARRERA22    " + lblBarrera2.getBounds());
                 }
                 if (!flagColision) {
+                    lblContador.setLocation(335, 420);
                     lblAvion.setIcon(imgExplosion);
-                    lblFinal.setVisible(true);
-                    btnSi.setVisible(true);
-                    btnNo.setVisible(true);
-                    lblContinue.setVisible(true);
+                    hazVisible(true);
                     tmrMovimiento.stop();
                 }
 
@@ -191,8 +191,34 @@ public class Juego extends JDialog implements ActionListener {
         this.getContentPane().addMouseListener(new MouseHelper());
     }
 
+    public void hazVisible(boolean flag) {
+        lblFinal.setVisible(flag);
+        btnSi.setVisible(flag);
+        btnNo.setVisible(flag);
+        lblContinue.setVisible(flag);
+    }
+
     @Override
     public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == btnSi) {
+            for (JLabel barrera : alBarreras) {
+                barrera.setVisible(false);
+            }
+            for (JLabel barrera : alBarreras2) {
+                barrera.setVisible(false);
+            }
+            alBarreras.clear();
+            alBarreras2.clear();
+            hazVisible(false);
+            record=0;
+            lblContador.setText("Puntuación : " + Integer.toString(record));
+            lblContador.setLocation(350, 50);
+            flagColision = true;
+            tmrMovimiento.start();
+        }
+        if (ae.getSource() == btnNo) {
+            this.dispose();
+        }
     }
 
     public class MouseHelper extends MouseAdapter {
@@ -212,16 +238,12 @@ public class Juego extends JDialog implements ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                flagMovimiento = true;
-            }
+
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                flagMovimiento = false;
-            }
+
         }
 
     }
