@@ -15,11 +15,13 @@ import javax.swing.*;
 public class Inicio extends JFrame implements ActionListener {
 
     private JButton btnJugar,btnRecord,btnSalir,btnControl;
-
+    private JLabel lblFondo,lblCredit;
     public Inicio() {
         super();
         this.setLayout(null);
-
+        
+         ImageIcon imgFondo = new ImageIcon( Inicio.class.getResource("/main/imagenes/fondo.gif"));
+ 
         //JUGAR
         btnJugar = new JButton("Jugar");
         btnJugar.setSize(100, 30);
@@ -47,6 +49,22 @@ public class Inicio extends JFrame implements ActionListener {
         btnSalir.setLocation(45, 150);
         btnSalir.addActionListener(this);
         this.add(btnSalir);
+        
+        //CREDITO
+        lblCredit=new JLabel("Airplane Dodge - Version 0.1");
+        lblCredit.setSize(200, 30);
+        lblCredit.setLocation(20, 250);
+        lblCredit.setVisible(true);
+        this.add(lblCredit);
+        
+        //FONDO
+        lblFondo=new JLabel(imgFondo);
+        lblFondo.setSize(200, 300);
+        lblFondo.setLocation(0, 0);
+        lblFondo.setVisible(true);
+        this.add(lblFondo);
+        
+        
     }
 
     @Override
