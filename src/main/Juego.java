@@ -14,78 +14,67 @@ import javax.swing.*;
  *
  * @author victor
  */
-public class Fondo extends JFrame implements ActionListener {
+public class Juego extends JDialog implements ActionListener {
 
     private boolean flag;
-    private JLabel lblAvion, lblBarrera, lblBarrera2,lblSuelo,lblCielo;
+    private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblFondo;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private int bolaY = 400, cont = 0, randSizeY, randLocY;
 
-    public Fondo() {
-        super("BeatBall");
+    public Juego(Inicio ventanaInicio) {
+        super(ventanaInicio, true);
         this.setLayout(null);
-
-       
-        ImageIcon imgCielo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\cielo.png");
-        ImageIcon imgSuelo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\suelo.png");
-        ImageIcon imgBarrera = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\columna.png");
-        ImageIcon imgFondo = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\fondo.gif");
-        ImageIcon imgAvion = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\avion.png");
-        ImageIcon imgSube = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\avionsube.png");
-        ImageIcon imgBaja = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\avionbaja.png");
-        ImageIcon imgExplosion = new ImageIcon("C:\\Users\\Victor\\Documents\\Proyectos\\ProyectoFindeCiclo\\src\\imagenes\\explosion.png");
         
-        ;
+       
+
+        ImageIcon imgCielo = new ImageIcon( Juego.class.getResource("/main/imagenes/cielo.png"));
+        ImageIcon imgSuelo = new ImageIcon( Juego.class.getResource("/main/imagenes/suelo.png"));
+        ImageIcon imgBarrera = new ImageIcon( Juego.class.getResource("/main/imagenes/columna.png"));
+//        ImageIcon imgFondo = new ImageIcon( Juego.class.getResource("/main/imagenes/cielo.png"));
+        ImageIcon imgAvion = new ImageIcon( Juego.class.getResource("/main/imagenes/avion.png"));
+        ImageIcon imgSube = new ImageIcon( Juego.class.getResource("/main/imagenes/avionsube.png"));
+        ImageIcon imgBaja = new ImageIcon( Juego.class.getResource("/main/imagenes/avionbaja.png"));
+        ImageIcon imgExplosion = new ImageIcon( Juego.class.getResource("/main/imagenes/explosion.png"));
+
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
-
         //PAJARO
         lblAvion = new JLabel(imgAvion);
-        lblAvion.setSize(100, 90);
+        lblAvion.setSize(30, 30);
         lblAvion.setLocation(50, bolaY);
         lblAvion.setVisible(true);
         this.add(lblAvion);
-        
+
         //SUELO
-        lblSuelo=new JLabel(imgSuelo);
+        lblSuelo = new JLabel(imgCielo);
         lblSuelo.setSize(900, 400);
         lblSuelo.setLocation(0, 650);
         lblSuelo.setVisible(true);
         this.add(lblSuelo);
         //CIELO
-        lblCielo=new JLabel(imgCielo);
-        lblCielo.setSize(900, 100);
+        lblCielo = new JLabel(imgSuelo);
+        lblCielo.setSize(900, 110);
         lblCielo.setLocation(0, 0);
         lblCielo.setVisible(true);
         this.add(lblCielo);
-        
-        
+        //FONDO
+//        lblFondo = new JLabel(imgFondo);
+//        lblFondo.setSize(600, 500);
+//        lblFondo.setLocation(0, 0);
+//        lblFondo.setVisible(true);
+//        this.add(lblFondo);
+
         tmrMovimiento = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                if (cont == 0 || (cont % 80 == 0)) {
+                if (cont == 0 || (cont % 250 == 0)) {
 
-                    randSizeY = (int) (Math.random() * 480 + 1);
-                    randLocY = randSizeY + 200;
-
-                    lblBarrera = new JLabel(imgBarrera);
-                    lblBarrera.setSize(50, randSizeY);
-                    lblBarrera.setLocation(900, 100);
-                    alBarreras.add(lblBarrera);
-
-                    lblBarrera2 = new JLabel(imgBarrera);
-                    lblBarrera2.setSize(50, (800));
-                    lblBarrera2.setLocation(900, randLocY);
-                    alBarreras2.add(lblBarrera2);
-
-                    //NO HACE FALTA INDEX PORQUE HACE REFERENCIA A SU PROPIA POSICION DE MEMORIA
-                    Fondo.this.add(lblBarrera);
-                    Fondo.this.add(lblBarrera2);
+                    creaBarrera();
 
                 }
-                
+
                 cont++;
                 for (JLabel barrera : alBarreras) {
                     barrera.setLocation(barrera.getX() - 5, 100);
@@ -105,17 +94,40 @@ public class Fondo extends JFrame implements ActionListener {
                 if (!flag) {
                     lblAvion.setIcon(imgBaja);
                     lblAvion.setLocation(50, lblAvion.getY() + 5);
-                    if (lblAvion.getY() == 600) {
+                    if (lblAvion.getY() == 630) {
                         lblAvion.setIcon(imgAvion);
                         lblAvion.setLocation(50, lblAvion.getY() - 5);
                     }
-                    System.err.println("AVION   "+lblAvion.getBounds());
-                    System.err.println("BARRERA   "+lblBarrera.getBounds());
-                    System.err.println("BARRERA22    "+lblBarrera2.getBounds());
+                    System.err.println("AVION   " + lblAvion.getBounds());
+                    System.err.println("BARRERA   " + lblBarrera.getBounds());
+                    System.err.println("BARRERA22    " + lblBarrera2.getBounds());
                 }
-                if ((lblAvion.getX()==(lblBarrera2.getX()/100))||(lblAvion.getY()==lblBarrera2.getY())) {
-                   lblAvion.setIcon(imgExplosion);
+                if ((lblAvion.getBounds().intersects(lblBarrera.getBounds())) || (lblAvion.getBounds().intersects(lblBarrera2.getBounds()))) {
+                    System.err.println("CHOCASTE WEÓN");
+                    lblAvion.setIcon(imgExplosion);
                 }
+            }
+
+            public void creaBarrera() {
+                randSizeY = (int) (Math.random() * 480 + 1);
+                randLocY = randSizeY + 200;
+
+                lblBarrera = new JLabel(imgBarrera);
+                lblBarrera.setSize(50, randSizeY);
+                lblBarrera.setLocation(900, 100);
+//                    lblBarrera.setComponentZOrder(Juego.this.lblBarrera, 0);
+                alBarreras.add(lblBarrera);
+
+                lblBarrera2 = new JLabel(imgBarrera);
+                lblBarrera2.setSize(50, (800));
+                lblBarrera2.setLocation(900, randLocY);
+//                    getContentPane().setComponentZOrder(Juego.this.lblBarrera2, 1);
+                alBarreras2.add(lblBarrera2);
+
+//NO HACE FALTA INDEX PORQUE HACE REFERENCIA A SU PROPIA POSICION DE MEMORIA
+                Juego.this.add(lblBarrera);
+                Juego.this.add(lblBarrera2);
+               ;
             }
         });
         tmrMovimiento.start();
