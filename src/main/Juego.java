@@ -17,10 +17,10 @@ import javax.swing.*;
 public class Juego extends JDialog implements ActionListener {
 
     private boolean flagMovimiento, flagColision=true;
-    private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblFondo;
+    private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblFondo,lblContador,lblFinal;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
-    private int bolaY = 400, cont = 0, randSizeY, randLocY;
+    private int bolaY = 400, cont = 0, randSizeY, randLocY,record=0;
 
     public Juego(Inicio ventanaInicio) {
         super(ventanaInicio, true);
@@ -34,6 +34,8 @@ public class Juego extends JDialog implements ActionListener {
         ImageIcon imgSube = new ImageIcon(Juego.class.getResource("/main/imagenes/avionsube.png"));
         ImageIcon imgBaja = new ImageIcon(Juego.class.getResource("/main/imagenes/avionbaja.png"));
         ImageIcon imgExplosion = new ImageIcon(Juego.class.getResource("/main/imagenes/explosion.png"));
+        ImageIcon imgFinal = new ImageIcon(Juego.class.getResource("/main/imagenes/gameover.png"));
+        
 
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
@@ -43,6 +45,20 @@ public class Juego extends JDialog implements ActionListener {
         lblAvion.setLocation(50, bolaY);
         lblAvion.setVisible(true);
         this.add(lblAvion);
+        
+        //CONTADOR PUNTUACIÓN
+        lblContador = new JLabel("Puntuación : "+Integer.toString(record));
+        lblContador.setSize(600,50);
+        lblContador.setLocation(350, 50);
+        lblContador.setVisible(true);
+        this.add(lblContador);
+        
+        //TEXTO FINAL
+        lblFinal = new JLabel(imgFinal);
+        lblFinal.setSize(500,300);
+        lblFinal.setLocation(150,200);
+        lblFinal.setVisible(false);
+        this.add(lblFinal);
 
         //SUELO
         lblSuelo = new JLabel(imgCielo);
@@ -76,6 +92,10 @@ public class Juego extends JDialog implements ActionListener {
                 cont++;
                 for (JLabel barrera : alBarreras) {
                     barrera.setLocation(barrera.getX() - 5, 100);
+                    if (barrera.getX()<50) {
+                        record++;
+                        lblContador.setText("Puntuación : "+Integer.toString(record));
+                    }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
                         flagColision = false;
                     }
@@ -83,6 +103,10 @@ public class Juego extends JDialog implements ActionListener {
                 }
                 for (JLabel barrera : alBarreras2) {
                     barrera.setLocation(barrera.getX() - 5, barrera.getY());
+                    if (barrera.getX()<50) {
+                        record++;
+                        lblContador.setText("Puntuación : "+Integer.toString(record));
+                    }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
                         flagColision = false;
                     }
@@ -109,6 +133,7 @@ public class Juego extends JDialog implements ActionListener {
                 }
                 if (!flagColision) {
                     lblAvion.setIcon(imgExplosion);
+                    lblFinal.setVisible(true);
                     tmrMovimiento.stop();
                 }
 
