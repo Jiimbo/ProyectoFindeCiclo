@@ -5,7 +5,6 @@
  */
 package main;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -16,17 +15,19 @@ import javax.swing.*;
  */
 public class Juego extends JDialog implements ActionListener {
 
+    private JMenuBar mnuBarra;
+    private JMenu mnuJuego, mnuOpciones;
+    private JMenuItem mnuRecord, mnuControles, mnuSalir;
     private boolean flagMovimiento, flagColision = true;
-    private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblFondo, lblContador, lblFinal, lblContinue;
+    private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblContador, lblFinal, lblContinue;
     private JButton btnSi, btnNo;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private int bolaY = 400, cont = 0, randSizeY, randLocY, record = 0;
 
     public Juego(Inicio ventanaInicio) {
-        super(ventanaInicio,"Airplane Dodge", true);
+        super(ventanaInicio, "Airplane Dodge", true);
         this.setLayout(null);
-        this.setFocusable(true);
 
         ImageIcon imgCielo = new ImageIcon(Juego.class.getResource("/main/imagenes/cielo.png"));
         ImageIcon imgSuelo = new ImageIcon(Juego.class.getResource("/main/imagenes/suelo.png"));
@@ -71,6 +72,7 @@ public class Juego extends JDialog implements ActionListener {
         btnSi = new JButton("Si");
         btnSi.setSize(100, 50);
         btnSi.setLocation(280, 500);
+        btnSi.setFocusable(true);
         btnSi.setVisible(false);
         btnSi.addActionListener(this);
         this.add(btnSi);
@@ -97,12 +99,7 @@ public class Juego extends JDialog implements ActionListener {
         this.add(lblCielo);
 
         this.getContentPane().addKeyListener(new KeyHelper());
-        //FONDO
-//        lblFondo = new JLabel(imgFondo);
-//        lblFondo.setSize(600, 500);
-//        lblFondo.setLocation(0, 0);
-//        lblFondo.setVisible(true);
-//        this.add(lblFondo);
+        this.getContentPane().setFocusable(true);
 
         tmrMovimiento = new Timer(10, new ActionListener() {
             @Override
@@ -149,9 +146,6 @@ public class Juego extends JDialog implements ActionListener {
                         lblAvion.setIcon(imgAvion);
                         lblAvion.setLocation(50, lblAvion.getY() - 5);
                     }
-//                    System.err.println("AVION   " + lblAvion.getBounds());
-//                    System.err.println("BARRERA   " + lblBarrera.getBounds());
-//                    System.err.println("BARRERA22    " + lblBarrera2.getBounds());
                 }
                 if (!flagColision) {
                     lblContador.setLocation(335, 420);
@@ -169,13 +163,11 @@ public class Juego extends JDialog implements ActionListener {
                 lblBarrera = new JLabel(imgBarrera);
                 lblBarrera.setSize(50, randSizeY);
                 lblBarrera.setLocation(900, 100);
-//                    lblBarrera.setComponentZOrder(Juego.this.lblBarrera, 0);
                 alBarreras.add(lblBarrera);
 
                 lblBarrera2 = new JLabel(imgBarrera);
                 lblBarrera2.setSize(50, (800));
                 lblBarrera2.setLocation(900, randLocY);
-//                    getContentPane().setComponentZOrder(Juego.this.lblBarrera2, 1);
                 alBarreras2.add(lblBarrera2);
 
 //NO HACE FALTA INDEX PORQUE HACE REFERENCIA A SU PROPIA POSICION DE MEMORIA
@@ -195,6 +187,7 @@ public class Juego extends JDialog implements ActionListener {
         btnSi.setVisible(flag);
         btnNo.setVisible(flag);
         lblContinue.setVisible(flag);
+        btnSi.setSelected(flag);
     }
 
     @Override
@@ -237,12 +230,19 @@ public class Juego extends JDialog implements ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
-
+            if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
+                flagMovimiento = true;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                tmrMovimiento.stop();
+            }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-
+            if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
+                flagMovimiento = false;
+            }
         }
 
     }
