@@ -6,65 +6,68 @@
 package main;
 
 import java.awt.event.*;
+import java.io.File;
+import java.util.Scanner;
 import javax.swing.*;
 
 /**
  *
  * @author Victor
  */
-public class Inicio extends JFrame implements ActionListener {
+public class Inicio extends JFrame implements ActionListener, Archivo {
 
-    private JButton btnJugar,btnRecord,btnSalir,btnControl;
-    private JLabel lblFondo,lblCredit;
+    private JButton btnJugar, btnRecord, btnSalir, btnControl;
+    private JLabel lblFondo, lblCredit;
+    private String path = System.getProperty("user.dir") + "/src/main/archivos/record.txt";
+
     public Inicio() {
         super();
         this.setLayout(null);
-        
-         ImageIcon imgFondo = new ImageIcon( Inicio.class.getResource("/main/imagenes/fondo.gif"));
- 
+
+        ImageIcon imgFondo = new ImageIcon(Inicio.class.getResource("/main/imagenes/fondo.gif"));
+
         //JUGAR
         btnJugar = new JButton("Jugar");
         btnJugar.setSize(100, 30);
         btnJugar.setLocation(45, 30);
         btnJugar.addActionListener(this);
         this.add(btnJugar);
-        
+
         //RECORD
         btnRecord = new JButton("Récord");
         btnRecord.setSize(100, 30);
         btnRecord.setLocation(45, 70);
         btnRecord.addActionListener(this);
         this.add(btnRecord);
-        
+
         //CONTROLES
         btnControl = new JButton("Controles");
         btnControl.setSize(100, 30);
         btnControl.setLocation(45, 110);
         btnControl.addActionListener(this);
         this.add(btnControl);
-        
+
         //SALIR
         btnSalir = new JButton("Salir");
         btnSalir.setSize(100, 30);
         btnSalir.setLocation(45, 150);
         btnSalir.addActionListener(this);
         this.add(btnSalir);
-        
+
         //CREDITO
-        lblCredit=new JLabel("Airplane Dodge - Version 0.1");
+        lblCredit = new JLabel("Airplane Dodge - Version 0.1");
         lblCredit.setSize(200, 30);
         lblCredit.setLocation(20, 250);
         lblCredit.setVisible(true);
         this.add(lblCredit);
-        
+
         //FONDO
-        lblFondo=new JLabel(imgFondo);
+        lblFondo = new JLabel(imgFondo);
         lblFondo.setSize(200, 300);
         lblFondo.setLocation(0, 0);
         lblFondo.setVisible(true);
         this.add(lblFondo);
-        
-        
+
     }
 
     @Override
@@ -77,27 +80,45 @@ public class Inicio extends JFrame implements ActionListener {
             juego.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             juego.setVisible(true);
         }
-        if (e.getSource()==btnRecord) {
+        if (e.getSource() == btnRecord) {
+
+            leeArchivo();
+//            Auxiliar aux = new Auxiliar(this);
+//            aux.setSize(220, 120);
+//            aux.setResizable(false);
+//            aux.setLocationRelativeTo(null);
+//            aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//            aux.setVisible(true);
+
+        }
+        if (e.getSource() == btnControl) {
             Auxiliar aux = new Auxiliar(this);
             aux.setSize(220, 120);
             aux.setResizable(false);
             aux.setLocationRelativeTo(null);
             aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             aux.setVisible(true);
-            
+
         }
-        if (e.getSource()==btnControl) {
-            Auxiliar aux = new Auxiliar(this);
-            aux.setSize(220, 120);
-            aux.setResizable(false);
-            aux.setLocationRelativeTo(null);
-            aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            aux.setVisible(true);
-            
-        }
-        if (e.getSource()==btnSalir) {
+        if (e.getSource() == btnSalir) {
             System.exit(0);
         }
+    }
+
+    @Override
+    public void leeArchivo() {
+        try (Scanner f = new Scanner(new File(path))) {
+            while (f.hasNext()) {
+                JOptionPane.showMessageDialog(null, f.nextLine());
+            }
+        } catch (Exception ex) {
+            System.err.println("No se pudo leer el archivo por " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void creaArchivo(int n) {
+        //AKA BORRAR ARCHIVO
     }
 
 }

@@ -6,25 +6,32 @@
 package main;
 
 import java.awt.event.*;
+import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
  *
  * @author victor
  */
-public class Juego extends JDialog implements ActionListener {
+public class Juego extends JDialog implements ActionListener, Archivo {
 
     private JMenuBar mnuBarra;
     private JMenu mnuJuego, mnuOpciones;
-    private JMenuItem mnuRecord, mnuControles, mnuSalir;
-    private JPanel pnlPausa;
+    private JMenuItem mnuRecord, mnuNuevo, mnuControles, mnuSalir, mnuAyuda;
+//    private JPanel pnlPausa;
     private boolean flagMovimiento, flagColision = true;
     private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblContador, lblFinal, lblContinue;
     private JButton btnSi, btnNo, btnContinuar, btnOpciones, btnSalir;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private int bolaY = 400, cont = 0, randSizeY, randLocY, record = 0;
+    private String path = System.getProperty("user.dir") + "/src/main/archivos/record.txt";
 
     public Juego(Inicio ventanaInicio) {
         super(ventanaInicio, "Airplane Dodge", true);
@@ -38,9 +45,50 @@ public class Juego extends JDialog implements ActionListener {
         ImageIcon imgBaja = new ImageIcon(Juego.class.getResource("/main/imagenes/avionbaja.png"));
         ImageIcon imgExplosion = new ImageIcon(Juego.class.getResource("/main/imagenes/explosion.png"));
         ImageIcon imgFinal = new ImageIcon(Juego.class.getResource("/main/imagenes/gameover.png"));
-
+        creaArchivo(record);
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
+        //MENU JUEGO
+        mnuRecord = new JMenuItem("Récord");
+        mnuRecord.setMnemonic('R');
+        mnuRecord.addActionListener(this);
+
+        mnuNuevo = new JMenuItem("Nuevo juego");
+        mnuNuevo.setMnemonic('N');
+        mnuNuevo.addActionListener(this);
+
+        mnuSalir = new JMenuItem("Salir");
+        mnuSalir.setMnemonic('S');
+        mnuSalir.addActionListener(this);
+
+        mnuJuego = new JMenu("Juego");
+        mnuJuego.setMnemonic('J');
+        mnuJuego.add(mnuNuevo);
+        mnuJuego.add(mnuRecord);
+        mnuJuego.addSeparator();
+        mnuJuego.add(mnuSalir);
+
+        //MENÚ OPCIONES
+        mnuControles = new JMenuItem("Controles");
+        mnuControles.setMnemonic('C');
+        mnuControles.addActionListener(this);
+
+        mnuAyuda = new JMenuItem("Ayuda");
+        mnuAyuda.setMnemonic('A');
+        mnuAyuda.addActionListener(this);
+
+        mnuOpciones = new JMenu("Opciones");
+        mnuOpciones.setMnemonic('O');
+        mnuOpciones.add(mnuControles);
+        mnuOpciones.addSeparator();
+        mnuOpciones.add(mnuAyuda);
+
+        //MENU PRINCIPAL
+        mnuBarra = new JMenuBar();
+        mnuBarra.add(mnuJuego);
+        mnuBarra.add(mnuOpciones);
+        this.setJMenuBar(mnuBarra);
+
         //PAJARO
         lblAvion = new JLabel(imgAvion);
         lblAvion.setSize(30, 30);
@@ -85,7 +133,30 @@ public class Juego extends JDialog implements ActionListener {
         btnNo.setVisible(false);
         btnNo.addActionListener(this);
         this.add(btnNo);
-
+        
+        //BOTONES PAUSA
+        //BOTON CONTINUA
+        btnContinuar = new JButton("Continuar");
+        btnContinuar.setSize(100, 40);
+        btnContinuar.setFocusable(true);
+        btnContinuar.setLocation(150, 50);
+        btnContinuar.setVisible(false);
+        btnContinuar.addActionListener(this);
+        this.add(btnContinuar);
+        //BOTON OPCIONES
+        btnOpciones = new JButton("Opciones");
+        btnOpciones.setSize(100, 40);
+        btnOpciones.setLocation(150, 100);
+        btnOpciones.setVisible(false);
+        btnOpciones.addActionListener(this);
+        this.add(btnOpciones);
+        //BOTON SALIR
+        btnSalir = new JButton("Salir");
+        btnSalir.setSize(100, 40);
+        btnSalir.setLocation(150, 150);
+        btnSalir.setVisible(false);
+        btnSalir.addActionListener(this);
+        this.add(btnSalir);
         //SUELO
         lblSuelo = new JLabel(imgSuelo);
         lblSuelo.setSize(900, 400);
@@ -117,6 +188,7 @@ public class Juego extends JDialog implements ActionListener {
                         lblContador.setText("Puntuación : " + Integer.toString(record));
                     }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
+                        creaArchivo(record);
                         flagColision = false;
                     }
 
@@ -128,6 +200,7 @@ public class Juego extends JDialog implements ActionListener {
                         lblContador.setText("Puntuación : " + Integer.toString(record));
                     }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
+                        creaArchivo(record);
                         flagColision = false;
                     }
                 }
@@ -190,39 +263,7 @@ public class Juego extends JDialog implements ActionListener {
         lblContinue.setVisible(flag);
         btnSi.setSelected(flag);
     }
-    public void creaPanel() {
-            pnlPausa= new JPanel();
-            pnlPausa.setLayout(null);
-            pnlPausa.setFocusable(true);
-            pnlPausa.setSize(500, 500);
-            pnlPausa.setLocation(200, 200);
-            pnlPausa.setOpaque(false);
-            pnlPausa.setVisible(true);
-            Juego.this.add(pnlPausa);
-            
-            btnContinuar = new JButton("Continuar");
-            btnContinuar.setSize(100, 40);
-            btnContinuar.setFocusable(true);
-            btnContinuar.setLocation(150, 50);
-            btnContinuar.setVisible(true);
-            btnContinuar.addActionListener(this);
-            pnlPausa.add(btnContinuar);
-            
-            btnOpciones = new JButton("Opciones");
-            btnOpciones.setSize(100, 40);
-            btnOpciones.setLocation(150, 100);
-            btnOpciones.setVisible(true);
-            btnOpciones.addActionListener(this);
-            pnlPausa.add(btnOpciones);
-            
-            btnSalir = new JButton("Salir");
-            btnSalir.setSize(100, 40);
-            btnSalir.setLocation(150, 150);
-            btnSalir.setVisible(true);
-            btnSalir.addActionListener(this);
-            pnlPausa.add(btnSalir);
-            
-        }
+
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == btnSi) {
@@ -255,6 +296,31 @@ public class Juego extends JDialog implements ActionListener {
         }
     }
 
+    @Override
+    public void leeArchivo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void creaArchivo(int newrecord) {
+        boolean flag = true;
+        try (Scanner f = new Scanner(new File(path))) {
+            while (f.hasNext()) {
+                int oldrecord = Integer.parseInt(f.nextLine());
+                if (newrecord > oldrecord) {
+                    flag = false;
+                }
+            }
+        } catch (Exception ex) {
+            System.err.println("No se pudo leer el archivo por " + ex.getMessage());
+        }
+        try (PrintWriter f = new PrintWriter(new FileWriter(path), flag)) {
+            f.println(newrecord);
+        } catch (Exception ex) {
+            System.err.println("No se ha podido escribir el archivo.");
+        }
+    }
+
     public class MouseHelper extends MouseAdapter {
 
         @Override
@@ -275,15 +341,13 @@ public class Juego extends JDialog implements ActionListener {
             if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
                 flagMovimiento = true;
             }
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if ((e.getKeyCode() == KeyEvent.VK_ESCAPE)||(e.getKeyCode()==KeyEvent.VK_P)) {
                 tmrMovimiento.stop();
-                creaPanel();
+//                creaPanel();
                 Juego.this.repaint();
             }
         }
 
-        
- 
         @Override
         public void keyReleased(KeyEvent e) {
             if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
@@ -293,3 +357,17 @@ public class Juego extends JDialog implements ActionListener {
 
     }
 }
+
+//public void creaPanel() {
+//            pnlPausa= new JPanel();
+//            pnlPausa.setLayout(null);
+//            pnlPausa.setFocusable(true);
+//            pnlPausa.setSize(500, 500);
+//            pnlPausa.setLocation(200, 200);
+//            pnlPausa.setOpaque(false);
+//            pnlPausa.setVisible(true);
+//            Juego.this.add(pnlPausa);
+//            
+//            
+//            
+//        }
