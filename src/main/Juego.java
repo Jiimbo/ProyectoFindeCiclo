@@ -18,9 +18,10 @@ public class Juego extends JDialog implements ActionListener {
     private JMenuBar mnuBarra;
     private JMenu mnuJuego, mnuOpciones;
     private JMenuItem mnuRecord, mnuControles, mnuSalir;
+    private JPanel pnlPausa;
     private boolean flagMovimiento, flagColision = true;
     private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblContador, lblFinal, lblContinue;
-    private JButton btnSi, btnNo;
+    private JButton btnSi, btnNo, btnContinuar, btnOpciones, btnSalir;
     private ArrayList<JLabel> alBarreras, alBarreras2;
     private Timer tmrMovimiento;
     private int bolaY = 400, cont = 0, randSizeY, randLocY, record = 0;
@@ -189,7 +190,39 @@ public class Juego extends JDialog implements ActionListener {
         lblContinue.setVisible(flag);
         btnSi.setSelected(flag);
     }
-
+    public void creaPanel() {
+            pnlPausa= new JPanel();
+            pnlPausa.setLayout(null);
+            pnlPausa.setFocusable(true);
+            pnlPausa.setSize(500, 500);
+            pnlPausa.setLocation(200, 200);
+            pnlPausa.setOpaque(false);
+            pnlPausa.setVisible(true);
+            Juego.this.add(pnlPausa);
+            
+            btnContinuar = new JButton("Continuar");
+            btnContinuar.setSize(100, 40);
+            btnContinuar.setFocusable(true);
+            btnContinuar.setLocation(150, 50);
+            btnContinuar.setVisible(true);
+            btnContinuar.addActionListener(this);
+            pnlPausa.add(btnContinuar);
+            
+            btnOpciones = new JButton("Opciones");
+            btnOpciones.setSize(100, 40);
+            btnOpciones.setLocation(150, 100);
+            btnOpciones.setVisible(true);
+            btnOpciones.addActionListener(this);
+            pnlPausa.add(btnOpciones);
+            
+            btnSalir = new JButton("Salir");
+            btnSalir.setSize(100, 40);
+            btnSalir.setLocation(150, 150);
+            btnSalir.setVisible(true);
+            btnSalir.addActionListener(this);
+            pnlPausa.add(btnSalir);
+            
+        }
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == btnSi) {
@@ -210,6 +243,15 @@ public class Juego extends JDialog implements ActionListener {
         }
         if (ae.getSource() == btnNo) {
             this.dispose();
+        }
+        if (ae.getSource() == btnContinuar) {
+            System.err.println("HOLAAAAAAAAA");
+        }
+        if (ae.getSource() == btnOpciones) {
+            System.err.println("HOLAAAAAAAAA");
+        }
+        if (ae.getSource() == btnSalir) {
+            System.err.println("HOLAAAAAAAAA");
         }
     }
 
@@ -235,9 +277,13 @@ public class Juego extends JDialog implements ActionListener {
             }
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 tmrMovimiento.stop();
+                creaPanel();
+                Juego.this.repaint();
             }
         }
 
+        
+ 
         @Override
         public void keyReleased(KeyEvent e) {
             if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
