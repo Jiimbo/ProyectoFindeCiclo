@@ -82,7 +82,7 @@ public class Inicio extends JFrame implements ActionListener {
         }
         if (e.getSource() == btnRecord) {
 
-            leeArchivo();
+            leeRecord();
 //            Auxiliar aux = new Auxiliar(this);
 //            aux.setSize(220, 120);
 //            aux.setResizable(false);
@@ -106,7 +106,7 @@ public class Inicio extends JFrame implements ActionListener {
     }
 
 
-    public void leeArchivo() {
+    public void leeRecord() {
         try (Scanner f = new Scanner(new File(path))) {
             while (f.hasNext()) {
                 JOptionPane.showMessageDialog(null, "La puntuación más alta es "+f.nextLine()+"p");
@@ -115,6 +115,4 @@ public class Inicio extends JFrame implements ActionListener {
             System.err.println("No se pudo leer el archivo por " + ex.getMessage());
         }
     }
-
-
 }

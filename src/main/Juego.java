@@ -19,11 +19,11 @@ import javax.swing.*;
  *
  * @author victor
  */
-public class Juego extends JDialog implements ActionListener, Archivo {
+public class Juego extends JDialog implements ActionListener {
 
     private JMenuBar mnuBarra;
     private JMenu mnuJuego, mnuOpciones;
-    private JMenuItem mnuRecord, mnuNuevo, mnuControles, mnuSalir, mnuAyuda;
+    private JMenuItem mnuRecord, mnuNuevo, mnuControles, mnuSalir, mnuAyuda, mnuBorrar;
 //    private JPanel pnlPausa;
     private boolean flagMovimiento, flagColision = true;
     private JLabel lblAvion, lblBarrera, lblBarrera2, lblSuelo, lblCielo, lblContador, lblFinal, lblContinue;
@@ -45,7 +45,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         ImageIcon imgBaja = new ImageIcon(Juego.class.getResource("/main/imagenes/avionbaja.png"));
         ImageIcon imgExplosion = new ImageIcon(Juego.class.getResource("/main/imagenes/explosion.png"));
         ImageIcon imgFinal = new ImageIcon(Juego.class.getResource("/main/imagenes/gameover.png"));
-        creaArchivo(record);
+        creaRecord(record);
         alBarreras = new ArrayList();
         alBarreras2 = new ArrayList();
         //MENU JUEGO
@@ -60,6 +60,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         mnuSalir = new JMenuItem("Salir");
         mnuSalir.setMnemonic('S');
         mnuSalir.addActionListener(this);
+        
 
         mnuJuego = new JMenu("Juego");
         mnuJuego.setMnemonic('J');
@@ -77,9 +78,14 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         mnuAyuda.setMnemonic('A');
         mnuAyuda.addActionListener(this);
 
+        mnuBorrar = new JMenuItem("Borrar Récord");
+        mnuBorrar.setMnemonic('B');
+        mnuBorrar.addActionListener(this);
         mnuOpciones = new JMenu("Opciones");
+        
         mnuOpciones.setMnemonic('O');
         mnuOpciones.add(mnuControles);
+        mnuOpciones.add(mnuBorrar);
         mnuOpciones.addSeparator();
         mnuOpciones.add(mnuAyuda);
 
@@ -139,21 +145,21 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         btnContinuar = new JButton("Continuar");
         btnContinuar.setSize(100, 40);
         btnContinuar.setFocusable(true);
-        btnContinuar.setLocation(150, 50);
+        btnContinuar.setLocation(350, 250);
         btnContinuar.setVisible(false);
         btnContinuar.addActionListener(this);
         this.add(btnContinuar);
         //BOTON OPCIONES
         btnOpciones = new JButton("Opciones");
         btnOpciones.setSize(100, 40);
-        btnOpciones.setLocation(150, 100);
+        btnOpciones.setLocation(350, 300);
         btnOpciones.setVisible(false);
         btnOpciones.addActionListener(this);
         this.add(btnOpciones);
         //BOTON SALIR
         btnSalir = new JButton("Salir");
         btnSalir.setSize(100, 40);
-        btnSalir.setLocation(150, 150);
+        btnSalir.setLocation(350, 350);
         btnSalir.setVisible(false);
         btnSalir.addActionListener(this);
         this.add(btnSalir);
@@ -188,7 +194,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
                         lblContador.setText("Puntuación : " + Integer.toString(record));
                     }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
-                        creaArchivo(record);
+                        creaRecord(record);
                         flagColision = false;
                     }
 
@@ -200,7 +206,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
                         lblContador.setText("Puntuación : " + Integer.toString(record));
                     }
                     if (lblAvion.getBounds().intersects(barrera.getBounds())) {
-                        creaArchivo(record);
+                        creaRecord(record);
                         flagColision = false;
                     }
                 }
@@ -232,7 +238,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
 
             public void creaBarrera() {
                 randSizeY = (int) (Math.random() * 480 + 1);
-                randLocY = randSizeY + 200;
+                randLocY = randSizeY + 225;
 
                 lblBarrera = new JLabel(imgBarrera);
                 lblBarrera.setSize(50, randSizeY);
@@ -296,12 +302,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         }
     }
 
-    @Override
-    public void leeArchivo() {
-    }
-
-    @Override
-    public void creaArchivo(int newrecord) {
+    public void creaRecord(int newrecord) {
         boolean flag = true;
         try (Scanner f = new Scanner(new File(path))) {
             while (f.hasNext()) {
@@ -314,7 +315,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
             System.err.println("No se pudo leer el archivo por " + ex.getMessage());
         }
         if (!flag) {
-            try (PrintWriter f = new PrintWriter(new FileWriter(path), false)) {
+            try (PrintWriter f = new PrintWriter(new FileWriter(path, false))) {
                 f.println(newrecord);
             } catch (Exception ex) {
                 System.err.println("No se ha podido escribir el archivo.");
@@ -322,9 +323,12 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         }
     }
 
-    @Override
-    public void borraArchivo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void borraRecord() {
+        try (PrintWriter f = new PrintWriter(new FileWriter(path, false))) {
+            f.println("0");
+        } catch (Exception ex) {
+            System.err.println("No se ha podido escribir el archivo.");
+        }
     }
 
     public class MouseHelper extends MouseAdapter {
@@ -349,7 +353,9 @@ public class Juego extends JDialog implements ActionListener, Archivo {
             }
             if ((e.getKeyCode() == KeyEvent.VK_ESCAPE) || (e.getKeyCode() == KeyEvent.VK_P)) {
                 tmrMovimiento.stop();
-//                creaPanel();
+                btnContinuar.setVisible(true);
+                btnOpciones.setVisible(true);
+                btnSalir.setVisible(true);
                 Juego.this.repaint();
             }
         }
