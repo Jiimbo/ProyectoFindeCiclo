@@ -81,15 +81,7 @@ public class Inicio extends JFrame implements ActionListener {
             juego.setVisible(true);
         }
         if (e.getSource() == btnRecord) {
-
             leeRecord();
-//            Auxiliar aux = new Auxiliar(this);
-//            aux.setSize(220, 120);
-//            aux.setResizable(false);
-//            aux.setLocationRelativeTo(null);
-//            aux.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//            aux.setVisible(true);
-
         }
         if (e.getSource() == btnControl) {
             Auxiliar aux = new Auxiliar(this);

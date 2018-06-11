@@ -7,12 +7,9 @@ package main;
 
 import java.awt.event.*;
 import java.io.*;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -292,7 +289,10 @@ public class Juego extends JDialog implements ActionListener {
             this.dispose();
         }
         if (ae.getSource() == btnContinuar) {
-            System.err.println("HOLAAAAAAAAA");
+            btnContinuar.setVisible(false);
+            btnOpciones.setVisible(false);
+            btnSalir.setVisible(false);
+            tmrMovimiento.start();
         }
         if (ae.getSource() == btnOpciones) {
             System.err.println("HOLAAAAAAAAA");
