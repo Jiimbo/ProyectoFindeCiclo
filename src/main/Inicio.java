@@ -14,7 +14,7 @@ import javax.swing.*;
  *
  * @author Victor
  */
-public class Inicio extends JFrame implements ActionListener, Archivo {
+public class Inicio extends JFrame implements ActionListener {
 
     private JButton btnJugar, btnRecord, btnSalir, btnControl;
     private JLabel lblFondo, lblCredit;
@@ -105,20 +105,16 @@ public class Inicio extends JFrame implements ActionListener, Archivo {
         }
     }
 
-    @Override
+
     public void leeArchivo() {
         try (Scanner f = new Scanner(new File(path))) {
             while (f.hasNext()) {
-                JOptionPane.showMessageDialog(null, f.nextLine());
+                JOptionPane.showMessageDialog(null, "La puntuación más alta es "+f.nextLine()+"p");
             }
         } catch (Exception ex) {
             System.err.println("No se pudo leer el archivo por " + ex.getMessage());
         }
     }
 
-    @Override
-    public void creaArchivo(int n) {
-        //AKA BORRAR ARCHIVO
-    }
 
 }

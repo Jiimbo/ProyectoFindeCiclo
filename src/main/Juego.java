@@ -133,7 +133,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         btnNo.setVisible(false);
         btnNo.addActionListener(this);
         this.add(btnNo);
-        
+
         //BOTONES PAUSA
         //BOTON CONTINUA
         btnContinuar = new JButton("Continuar");
@@ -298,7 +298,6 @@ public class Juego extends JDialog implements ActionListener, Archivo {
 
     @Override
     public void leeArchivo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -314,11 +313,18 @@ public class Juego extends JDialog implements ActionListener, Archivo {
         } catch (Exception ex) {
             System.err.println("No se pudo leer el archivo por " + ex.getMessage());
         }
-        try (PrintWriter f = new PrintWriter(new FileWriter(path), flag)) {
-            f.println(newrecord);
-        } catch (Exception ex) {
-            System.err.println("No se ha podido escribir el archivo.");
+        if (!flag) {
+            try (PrintWriter f = new PrintWriter(new FileWriter(path), false)) {
+                f.println(newrecord);
+            } catch (Exception ex) {
+                System.err.println("No se ha podido escribir el archivo.");
+            }
         }
+    }
+
+    @Override
+    public void borraArchivo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public class MouseHelper extends MouseAdapter {
@@ -341,7 +347,7 @@ public class Juego extends JDialog implements ActionListener, Archivo {
             if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
                 flagMovimiento = true;
             }
-            if ((e.getKeyCode() == KeyEvent.VK_ESCAPE)||(e.getKeyCode()==KeyEvent.VK_P)) {
+            if ((e.getKeyCode() == KeyEvent.VK_ESCAPE) || (e.getKeyCode() == KeyEvent.VK_P)) {
                 tmrMovimiento.stop();
 //                creaPanel();
                 Juego.this.repaint();
@@ -357,17 +363,3 @@ public class Juego extends JDialog implements ActionListener, Archivo {
 
     }
 }
-
-//public void creaPanel() {
-//            pnlPausa= new JPanel();
-//            pnlPausa.setLayout(null);
-//            pnlPausa.setFocusable(true);
-//            pnlPausa.setSize(500, 500);
-//            pnlPausa.setLocation(200, 200);
-//            pnlPausa.setOpaque(false);
-//            pnlPausa.setVisible(true);
-//            Juego.this.add(pnlPausa);
-//            
-//            
-//            
-//        }

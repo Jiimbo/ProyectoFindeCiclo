@@ -12,4 +12,5 @@ package main;
 public interface Archivo {
     public void leeArchivo();
     public void creaArchivo(int n);
+    public void borraArchivo();
 }
